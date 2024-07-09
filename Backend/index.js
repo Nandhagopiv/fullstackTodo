@@ -26,23 +26,39 @@ server.get('/list', async (req, res) => {
 
 server.get('/delete', async (req, res) => {
   try {
-      await client.connect();
-      const db = client.db('todolist');
-      const shoppingList = db.collection('shoppinglist');
-      const itemId = req.query.forDel;
-      
-      const result = await shoppingList.deleteOne({forDel: itemId});
-      console.log(result);
+    await client.connect();
+    const db = client.db('todolist');
+    const shoppingList = db.collection('shoppinglist');
+    const itemId = req.query.forDel;
 
-      if (result.deletedCount === 1) {
-        const data = await shoppingList.find().toArray()
-        res.send(data)
-      }
+    const result = await shoppingList.deleteOne({ forDel: itemId });
+    console.log(result);
+
+    if (result.deletedCount === 1) {
+      const data = await shoppingList.find().toArray()
+      res.send(data)
+    }
   } catch (err) {
-      console.error('Error deleting item:', err);
-      res.status(500).json({ error: 'Failed to delete item' });
+    console.error('Error deleting item:', err);
+    res.status(500).json({ error: 'Failed to delete item' });
   }
 });
+
+server.get('update', async (req, res) => {
+  try {
+    await client.connect();
+    const db = client.db('todolist');
+    const shoppingList = db.collection('shoppinglist');
+    const result = await shoppingList.updateOne({forDel:req.query.forDel},{$set:{item:req.query.item}})
+    console.log(result);
+    const data = await shoppingList.find().toArray()
+    res.send(data)
+    
+  } catch (err) {
+    console.error('Error deleting item:', err);
+    res.status(500).json({ error: 'Failed to delete item' });
+  }
+})
 
 server.get('/addlist', async (req, res) => {
   try {
@@ -50,7 +66,7 @@ server.get('/addlist', async (req, res) => {
     const db = client.db('todolist');
     const shoppingList = db.collection('shoppinglist');
 
-    const newItem = { item: req.query.item, forDel: req.query.forDel};
+    const newItem = { item: req.query.item, forDel: req.query.forDel };
     await shoppingList.insertOne(newItem);
 
     res.status(201).json({ message: 'Item added to shopping list' });
