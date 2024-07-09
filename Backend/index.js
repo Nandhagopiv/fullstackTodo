@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { MongoClient } from 'mongodb';
+import { log } from 'console';
 
 const server = express();
 server.use(express.json());
@@ -44,13 +45,12 @@ server.get('/delete', async (req, res) => {
   }
 });
 
-server.get('update', async (req, res) => {
+server.get('/update', async (req, res) => {
   try {
     await client.connect();
     const db = client.db('todolist');
     const shoppingList = db.collection('shoppinglist');
-    const result = await shoppingList.updateOne({forDel:req.query.forDel},{$set:{item:req.query.item}})
-    console.log(result);
+    await shoppingList.updateMany({item: req.query.product},{$set:{item:req.query.item}})
     const data = await shoppingList.find().toArray()
     res.send(data)
     
@@ -71,8 +71,8 @@ server.get('/addlist', async (req, res) => {
 
     res.status(201).json({ message: 'Item added to shopping list' });
   } catch (err) {
-    console.error('Error adding item:', err);
-    res.status(500).json({ error: 'Failed to add item to shopping list' });
+    console.error('Error Updating item:', err);
+    res.status(500).json({ error: 'Failed to update item to shopping list' });
   }
 });
 
