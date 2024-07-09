@@ -31,13 +31,11 @@ function App() {
     }
   }
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     setStsDel(true)
     axios.get(`https://fullstacktodo-20uz.onrender.com/delete?forDel=${id}`).then((data) => {
       setShoppingList(data.data)
-      if (data.statusText === "OK") {
-        setStsDel(false)
-      }
+      setStsDel(false)
     })
   }
 
