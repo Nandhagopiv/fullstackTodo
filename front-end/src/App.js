@@ -16,7 +16,7 @@ function App() {
   }
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/list`).then((data) => {
+    axios.get(`https://fullstacktodo-20uz.onrender.com/list`).then((data) => {
       setShoppingList(data.data)
     })
   }, [])
@@ -26,14 +26,14 @@ function App() {
       alert("Enter something to add to your shopping list")
     } else {
       setShoppingList([...shoppingList, { item: product, forDel: shoppingList.length + 1 }])
-      await axios.get(`http://localhost:5000/addlist?item=${product}&forDel=${shoppingList.length + 1}`)
+      await axios.get(`https://fullstacktodo-20uz.onrender.com/addlist?item=${product}&forDel=${shoppingList.length + 1}`)
       setProduct('')
     }
   }
 
   const handleDelete = (id) => {
     setStsDel(true)
-    axios.get(`http://localhost:5000/delete?forDel=${id}`).then((data) => {
+    axios.get(`https://fullstacktodo-20uz.onrender.com/delete?forDel=${id}`).then((data) => {
       setShoppingList(data.data)
       if (data.statusText === "OK") {
         setStsDel(false)
