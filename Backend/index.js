@@ -30,9 +30,9 @@ server.get('/delete', async (req, res) => {
     await client.connect();
     const db = client.db('todolist');
     const shoppingList = db.collection('shoppinglist');
-    const itemId = req.query.forDel;
+    const item = req.query.item;
 
-    const result = await shoppingList.deleteOne({ forDel: itemId });
+    const result = await shoppingList.deleteOne({ item: item });
     console.log(result);
 
     if (result.deletedCount === 1) {

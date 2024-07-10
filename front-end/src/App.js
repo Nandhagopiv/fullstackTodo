@@ -40,9 +40,9 @@ function App() {
     }
   }
 
-  const handleDelete = (id) => {
+  const handleDelete = (item) => {
     setStsDel(true)
-    axios.get(`https://fullstacktodo-20uz.onrender.com/delete?forDel=${id}`).then((data) => {
+    axios.get(`https://fullstacktodo-20uz.onrender.com/delete?item=${item}`).then((data) => {
       setShoppingList(data.data)
       setStsDel(false)
     })
@@ -64,7 +64,7 @@ function App() {
         <section className="w-[80%] sm:w-[50%] flex flex-col mt-5 gap-2">
           {
             shoppingList.map((data, index) => {
-              return <div className="flex justify-between gap-10 items-center"><h1 className="text-xl font-semibold break-all">{index + 1}. {data.item}</h1><div className="flex gap-2"><button onClick={() => handleEdit(data._id, data.item)} className="text-sm font-bold bg-black rounded-lg text-white p-2">Edit</button><button onClick={() => handleDelete(data.forDel)} className="text-sm font-bold bg-black rounded-lg text-white p-2">Delete</button></div></div>
+              return <div className="flex justify-between gap-10 items-center"><h1 className="text-xl font-semibold break-all">{index + 1}. {data.item}</h1><div className="flex gap-2"><button onClick={() => handleEdit(data._id, data.item)} className="text-sm font-bold bg-black rounded-lg text-white p-2">Edit</button><button onClick={() => handleDelete(data.item)} className="text-sm font-bold bg-black rounded-lg text-white p-2">Delete</button></div></div>
             })
           }
         </section>
