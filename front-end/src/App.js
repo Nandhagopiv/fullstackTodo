@@ -12,14 +12,18 @@ function App() {
   const [stsDel, setStsDel] = useState(false)
   const [updateID, setUpdateID] = useState()
   const [modify, setModify] = useState(false)
+  const [stsLoad,setStsLoad] = useState(false)
+  const [stsEdit,setStsEdit] = useState(false)
 
   const handleChange = (e) => {
     setProduct(e.target.value)
   }
 
   useEffect(() => {
+    setStsLoad(true)
     axios.get(`https://fullstacktodo-20uz.onrender.com/list`).then((data) => {
       setShoppingList(data.data)
+      setStsLoad(false)
     })
   }, [])
 
@@ -28,8 +32,10 @@ function App() {
       alert("Enter something to add to your shopping list")
     } else {
       if (modify === true) {
+        setStsEdit(true)
         await axios.get(`https://fullstacktodo-20uz.onrender.com/update?product=${updateID}&item=${product}`).then((data)=>{
           setShoppingList(data.data)
+          setStsEdit(false)
         })
         setModify(false)
       } else {
@@ -48,7 +54,7 @@ function App() {
     })
   }
 
-  const handleEdit = (id, item) => {
+  const handleEdit = (item) => {
     setModify(true)
     setUpdateID(item)
     setProduct(item)
@@ -64,11 +70,13 @@ function App() {
         <section className="w-[80%] sm:w-[50%] flex flex-col mt-5 gap-2">
           {
             shoppingList.map((data, index) => {
-              return <div className="flex justify-between gap-10 items-center"><h1 className="text-xl font-semibold break-all">{index + 1}. {data.item}</h1><div className="flex gap-2"><button onClick={() => handleEdit(data._id, data.item)} className="text-sm font-bold bg-black rounded-lg text-white p-2">Edit</button><button onClick={() => handleDelete(data.item)} className="text-sm font-bold bg-black rounded-lg text-white p-2">Delete</button></div></div>
+              return <div className="flex justify-between gap-10 items-center"><h1 className="text-xl font-semibold break-all">{index + 1}. {data.item}</h1><div className="flex gap-2"><button onClick={() => handleEdit(data.item)} className="text-sm font-bold bg-black rounded-lg text-white p-2">Edit</button><button onClick={() => handleDelete(data.item)} className="text-sm font-bold bg-black rounded-lg text-white p-2">Delete</button></div></div>
             })
           }
         </section>
         <section style={{ backgroundColor: 'rgba(0, 0, 0, 0.666)', display: stsDel ? 'flex' : 'none' }} className="h-[100%] flex justify-center items-center fixed w-[100%]"><h1 className="text-5xl text-white font-bold">Deleting...</h1></section>
+        <section style={{ backgroundColor: 'rgba(0, 0, 0, 0.666)', display: stsLoad ? 'flex' : 'none' }} className="h-[100%] flex justify-center items-center fixed w-[100%]"><h1 className="text-5xl text-white font-bold">Loading...</h1></section>
+        <section style={{ backgroundColor: 'rgba(0, 0, 0, 0.666)', display: stsEdit ? 'flex' : 'none' }} className="h-[100%] flex justify-center items-center fixed w-[100%]"><h1 className="text-5xl text-white font-bold">Updating...</h1></section>
       </section>
       
     </Fragment>
